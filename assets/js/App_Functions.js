@@ -2,6 +2,30 @@ parameterID = 0;
 currLocation = "";
 url = "";
 transferDrawerName = "";
+searchItem = "";
+
+function searchDB(url)
+{
+    search = $('#searchValue').val();
+    $.post(
+        url+"search",
+        {
+            searchString:search
+        },
+        function (data)
+        {
+            console.log (data);
+            if (data==="Invalid string")
+            {
+                $('#errInvalidSearch').modal('show');
+            }
+            if (data==="Found")
+            {
+                window.location.href = url+"search_results";
+            }
+        }
+    );
+}
 
 function storeDocument (documentID)
 {

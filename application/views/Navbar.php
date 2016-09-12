@@ -40,15 +40,13 @@
                                 </li>
                             </ul>
                         </li>
-                        <li>
-                            <form class = "navbar-form navbar-left" role = "search">
-                                <div class = "form-group">
-                                    <input type = "text" class = "form-control" placeholder = "Search">
-                                </div>
-                                <button type = "submit" class = "btn btn-default"> Submit </button>
-                            </form>
-                        </li>
                     </ul>
+                    <form class = "navbar-form navbar-right" method = "POST" action = "<?php echo base_url();?>search">
+                        <div class = "form-group">
+                            <input type = "text" class = "form-control" placeholder = "Search" id = "searchValue" name = "searchValue">
+                        </div>
+                        <button type = "submit" class = "btn btn-default"><span class = "glyphicon glyphicon-search"></span></button>
+                    </form>
                 </div>
             </div>
         </nav>
@@ -69,5 +67,3 @@
                 <div class = "col-md-3"> &nbsp; </div>
             </div>
         </div>
-
-        <!-- Modal for Add Document -->

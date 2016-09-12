@@ -164,6 +164,96 @@ class App_Controller extends CI_Controller
             }
         }
     }
+
+    public function search ()
+    {
+        if (array_key_exists ("searchValue", $_POST) && !empty($_POST['searchValue']))
+        {
+            $searchString = "'%".$_POST['searchValue']."%'";
+            $this->load->database ();
+
+            // search all stored documents
+            $result = $this->db->query ("SELECT document.documentName AS 'name', drawer.drawerName AS 'location' FROM document, drawer, storage WHERE (document.documentName LIKE $searchString) AND (storage.documentID = document.documentID) AND (storage.drawerID = drawer.drawerID)");
+            if ($this->db->affected_rows () > 0)
+            {
+                // prepare table
+                $this->table->clear ();
+                $template = array (
+                    'table_open' => '<table class = "table table-striped table-bordered text-center">',
+                    'heading_cell_start' => '<th class = "text-center">'
+                );
+                $this->table->set_template ($template);
+                $this->table->set_heading ("Document Name", "Location");
+
+                foreach ($result->result_array() as $row)
+                {
+                    $this->table->add_row ($row['name'], $row['location']);
+                }
+
+                $db_data['searchRes_storedDocs'] = $this->table->generate ();
+            }
+            else
+            {
+                $db_data['searchRes_storedDocs'] = heading ("No Stored Documents related to ".$_POST['searchValue'], 3, array ('class' => 'text-center'));
+            }
+
+            // search all unstored documents
+            $result = $this->db->query ("SELECT document.documentName AS 'name' FROM document WHERE (document.documentName LIKE $searchString) AND (document.isStored = 0)");
+            if ($this->db->affected_rows () > 0)
+            {
+                // prepare table
+                $this->table->clear ();
+                $template = array (
+                    'table_open' => '<table class = "table table-striped table-bordered text-center">',
+                    'heading_cell_start' => '<th class = "text-center">'
+                );
+                $this->table->set_template ($template);
+                $this->table->set_heading ("Document Name");
+
+                foreach ($result->result_array () as $row)
+                {
+                    $this->table->add_row ($row['name']);
+                }
+
+                $db_data['searchRes_unstoredDocs'] = $this->table->generate ();
+            }
+            else
+            {
+                $db_data['searchRes_unstoredDocs'] = heading ("No Unstored Documents related to ".$_POST['searchValue'], 3, array ('class' => 'text-center'));
+            }
+
+            // search drawers
+            $result = $this->db->query ("SELECT drawer.drawerName AS 'name' FROM drawer WHERE (drawer.drawerName = $searchString)");
+            if ($this->db->affected_rows () > 0)
+            {
+                // prepare table
+                $this->table->clear ();
+                $template = array (
+                    'table_open' => '<table class = "table table-striped table-bordered text-center">',
+                    'heading_cell_start' => '<th class = "text-center">'
+                );
+                $this->table->set_template ($template);
+                $this->table->set_heading ("Drawer Name");
+
+                foreach ($result->result_array () as $row)
+                {
+                    $this->table->add_row ($row['name']);
+                }
+
+                $db_data['searchRes_drawers'];
+            }
+            else
+            {
+                $db_data['searchRes_drawers'] = heading ("No Drawers related to ".$_POST['searchValue'], 3, array ('class' => 'text-center'));
+            }
+
+            $this->load->view ("App_SearchResults", $db_data);
+        }
+        else {
+            $db_data['emptySearch'] = "emptysearch";
+            $this->load->view ("App_SearchResults", $db_data);
+        }
+    }
 }
 
 ?>

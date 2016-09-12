@@ -58,7 +58,7 @@ $route['add_document'] = 'App_Controller/add_document';
 $route['add_drawer'] = 'App_Controller/add_drawer';
 $route['delete_document'] = 'App_Controller/delete_document';
 $route['delete_drawer'] = 'App_Controller/delete_drawer';
-$route['rename_drawer'] = 'App_Controller/rename_drawer';
+$route['search'] = 'App_Controller/search';
 $route['store_document'] = 'App_Controller/store_document';
 $route['transfer_document'] = 'App_Controller/transfer_document';
 
